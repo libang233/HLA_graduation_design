@@ -6,21 +6,22 @@
 #include <QTcpSocket>
 
 
-class SocketConfig  :public QMainWindow
+class SocketConfig :public QMainWindow
 {
 public:
-    int  initSocket();
-    void sendData();
-
-private slots:
-    void serverNewConnection();
+    bool initSocket();
+    void sendData(QString sendData);
+    QTcpServer *myTCPServer;
+    QTcpSocket *myTCPSocket;
+    bool serverNewConnection();
     void serverDisConnection();
     void receiveData();
 
-private:
-    QTcpServer *myTCPServer;
-    QTcpSocket *myTCPSocket;
+
+
 
 };
+
+
 
 #endif // SOCKET_CONFIG_H

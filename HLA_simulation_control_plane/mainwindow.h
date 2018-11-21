@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "socket_config.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -15,8 +17,17 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+
+private slots:
+   // void sysInit();
+    void serverInit();
+    void msgSend();
+    void msgRead();
+    void winNewConnect();
+
 private:
     Ui::MainWindow *ui;
+    SocketConfig socketServer;
 };
 
 #endif // MAINWINDOW_H
