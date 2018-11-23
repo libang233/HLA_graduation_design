@@ -6,6 +6,9 @@
 #include "ExampleCPPFederate.h"
 #include <string>
 
+#include "socketConfig.h"
+
+
 using namespace std;
 
 ExampleCPPFederate::ExampleCPPFederate()
@@ -123,8 +126,15 @@ void ExampleCPPFederate::runFederate( char* federateName )
 		sendInteraction();
 
 		// 9.3 request a time advance and wait until we get it
-		advanceTime( 1.0 );
+		advanceTime( 10.0 );
 		cout << "Time Advanced to " << fedamb->federateTime << endl;
+        
+
+		char sendData[1024];
+
+		sprintf(sendData,  "Time Advanced to %f", fedamb->federateTime);
+
+		send(socketSclient, sendData, strlen(sendData), 0);
 	} 
 
 	//////////////////////////////////////

@@ -10,8 +10,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
-    connect(ui->initBtn, SIGNAL(clicked()), this, SLOT(serverInit()));
+    connect(ui->initBtn, SIGNAL(clicked()), this, SLOT(winSystemInit()));
     connect(ui->sendButton, SIGNAL(clicked()), this, SLOT(winMsgSend()));
+
+    connect(&parser, SIGNAL(send(QString)), this, SLOT(accept(QString)));
 
 }
 
@@ -20,8 +22,10 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::serverInit()
+void MainWindow::winSystemInit()
 {
+
+
     if(socketServer.initSocket() == false)
     {
         QMessageBox::information(this, "QT通信网络", "服务器端监听失败");
@@ -30,7 +34,16 @@ void MainWindow::serverInit()
     {
         connect(socketServer.myTCPServer, SIGNAL(newConnection()), this, SLOT(winNewConnect()));
         QMessageBox::information(this, "QT通信网络", "服务器端监听成功");
+
     }
+
+    parser.parserInit();
+    parser.start();
+}
+
+void MainWindow::accept(QString msg)
+{
+    QMessageBox::information(this, "QT通信网络", msg);
 }
 
 void MainWindow::winNewConnect()
@@ -50,6 +63,29 @@ void MainWindow::winNewConnect()
 void MainWindow::winMsgRead()
 {
     socketServer.receiveData();
+
+     //QMessageBox::information(this, "QT网络通信", QString("%1").arg(socketServer.bufferIdx));
+
+    for(int i = 0; i < socketServer.bufferIdx; i++)
+    {
+        if(i < BUFFER_VAL_MAX)
+        {
+            parser.frameBuffers[parser.addIdx].buff[i] = socketServer.buffer[i];
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    if(parser.addIdx < FRAME_NUM_MAX - 1)
+    {
+        parser.addIdx++;
+    }
+    else
+    {
+         parser.addIdx = 0;
+    }
 }
 
 void MainWindow::winMsgSend()

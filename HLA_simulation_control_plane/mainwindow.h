@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "socket_config.h"
+#include "data_parse.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,14 +21,17 @@ public:
 
 private slots:
    // void sysInit();
-    void serverInit();
-    void msgSend();
-    void msgRead();
+    void winSystemInit();
+    void winMsgSend();
+    void winMsgRead();
     void winNewConnect();
+
+    void accept(QString msg);
 
 private:
     Ui::MainWindow *ui;
     SocketConfig socketServer;
+    ParserDef parser;
 };
 
 #endif // MAINWINDOW_H

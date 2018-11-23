@@ -1,6 +1,12 @@
 #include "data_parse.h"
 
-ParserDef parser;
+
+
+void ParserDef::parserInit()
+{
+    addIdx = 0;
+    getIdx = 0;
+}
 
 //获取缓冲区帧数
 int ParserDef::getFrameLength()
@@ -20,27 +26,38 @@ int ParserDef::getFrameLength()
 //执行帧解析
 bool ParserDef::frameParse()
 {
-
+   emit send(QString(frameBuffers[getIdx].buff));
+  if(frameBuffers[getIdx].buff[0] == '2')
+  {
+        emit send(QString("get 2"));
+  }
 }
 
 //解析器线程
-void ParserDef::parsingHandle()
+void ParserDef::run()
 {
-    if(getFrameLength() > 0)
+    //emit send(QString("thread work"));
+
+    while(true)
     {
-        if(frameParse() == true)
+        if(getFrameLength() > 0)
         {
-            getIdx++;
-        }
-        else
-        {
-            getIdx++;
-        }
 
-        if(getIdx >= FRAME_NUM_MAX)
-        {
-           getIdx = 0;
-        }
+            if(frameParse() == true)
+            {
+                getIdx++;
+            }
+            else
+            {
+                getIdx++;
+            }
 
+            if(getIdx >= FRAME_NUM_MAX)
+            {
+               getIdx = 0;
+            }
+
+        }
     }
+
 }

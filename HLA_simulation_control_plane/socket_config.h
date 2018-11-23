@@ -15,7 +15,10 @@ public:
     QTcpSocket *myTCPSocket;
     bool serverNewConnection();
     void serverDisConnection();
-    void receiveData();
+    bool receiveData();
+
+    char buffer[1024];
+    int bufferIdx;
 
 
 

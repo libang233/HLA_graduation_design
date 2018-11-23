@@ -42,7 +42,8 @@ goto finish
 ############################################
 :compile
 echo Compiling example federate
-cl /I"F:\Program Files\portico-2016.05.28\include\hla13" /DRTI_USES_STD_FSTREAM /EHsc main.cpp ExampleCPPFederate.cpp ExampleFedAmb.cpp "F:\Program Files\portico-2016.05.28\lib\vc10\libRTI-NG.lib" "F:\Program Files\portico-2016.05.28\lib\vc10\libFedTime.lib"
+::在此添加需要编译的文件
+cl /I"F:\Program Files\portico-2016.05.28\include\hla13" /DRTI_USES_STD_FSTREAM /EHsc main.cpp ExampleCPPFederate.cpp ExampleFedAmb.cpp socketConfig.cpp "F:\Program Files\portico-2016.05.28\lib\vc10\libRTI-NG.lib" "F:\Program Files\portico-2016.05.28\lib\vc10\libFedTime.lib"
 goto finish
 
 ############################################
