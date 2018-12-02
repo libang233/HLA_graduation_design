@@ -4,6 +4,7 @@
 #include "ExampleFedAmb.h"
 #include "RTI.hh"
 
+
 #define READY_TO_RUN "ReadyToRun"
 
 class ExampleCPPFederate

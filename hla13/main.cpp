@@ -3,13 +3,14 @@
 #include <SDKDDKVer.h>
 
 #include "socketConfig.h"
-
-
+#include "simType.h"
 
 
 int main( int argc, char *argv[] )
 {
+	globleSimData.dataInit();
     socketInit();
+	
 
 	// check to see if we have a federate name
 	char* federateName = "exampleFederate";
@@ -19,6 +20,7 @@ int main( int argc, char *argv[] )
 	// create and run the federate
 	ExampleCPPFederate *federate;
 	federate = new ExampleCPPFederate();
+	
 	federate->runFederate( federateName );
 	
     

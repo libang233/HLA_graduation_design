@@ -37,7 +37,7 @@ void MainWindow::winSystemInit()
 
     }
 
-    parser.parserInit();
+
     parser.start();
 }
 
@@ -64,8 +64,19 @@ void MainWindow::winMsgRead()
 {
     socketServer.receiveData();
 
-     //QMessageBox::information(this, "QT网络通信", QString("%1").arg(socketServer.bufferIdx));
+    //QMessageBox::information(this, "QT网络通信", QString("%1").arg(socketServer.bufferIdx));
 
+    for(int i = 0; i < socketServer.bufferIdx; i++)
+    {
+        if(parser.socketBuffer.addIdx >= SOCKET_BUFF_VAL_MAX)
+        {
+           parser.socketBuffer.addIdx = 0;
+        }
+
+        parser.socketBuffer.buff[parser.socketBuffer.addIdx++] = socketServer.buffer[i];
+    }
+
+    /*
     for(int i = 0; i < socketServer.bufferIdx; i++)
     {
         if(i < BUFFER_VAL_MAX)
@@ -86,6 +97,7 @@ void MainWindow::winMsgRead()
     {
          parser.addIdx = 0;
     }
+    */
 }
 
 void MainWindow::winMsgSend()

@@ -1,37 +1,19 @@
 #include "socketConfig.h"
+#include "dataReceive.h"
+#include "simType.h"
 
 using namespace std;
 
-bool connectFlag;
 SOCKET socketSclient;
 
 
-DWORD WINAPI recvHandle(LPVOID lpParamter)
-{
-	while(true)
-	{
-		while(connectFlag)
-		{
-			char recData[255];
-			int ret = recv(socketSclient, recData, 255, 0);
-			if(ret>0)
-			{
-				recData[ret] = 0x00;
-				printf(recData);
-				printf("\n");
-			}
-		}
-	}
 
-	return 0L;//必须返回一个值
-}
 
 void socketInit()
 {
-    connectFlag = false;
 
 	//创建接收线程
-	HANDLE hThread = CreateThread(NULL, 0, recvHandle, NULL, 0, NULL);
+	HANDLE hThread = CreateThread(NULL, 0, winRecvHandle, NULL, 0, NULL);
 	CloseHandle(hThread);
 
 	WORD sockVersion = MAKEWORD(2, 2);
@@ -41,6 +23,20 @@ void socketInit()
 	{
 		return;
 	}
+
+	//创建解析线程
+	HANDLE PThread = CreateThread(NULL, 0, winParserHandle, NULL, 0, NULL);
+	CloseHandle(PThread);
+
+	WORD PSockVersion = MAKEWORD(2, 2);
+	WSADATA PData;
+
+	if(WSAStartup(PSockVersion, &PData)!=0)
+	{
+		return;
+	}
+
+	
 
 	socketSclient = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	while(true)
@@ -68,7 +64,7 @@ void socketInit()
 		else
 		{
 			printf("connect successd!\n");
-			connectFlag = true;
+			globleSimData.connectFlag = true;
 			break;
 		}
 	}

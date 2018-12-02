@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>636</width>
+    <width>657</width>
     <height>521</height>
    </rect>
   </property>
@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="initBtn">
     <property name="geometry">
      <rect>
-      <x>440</x>
-      <y>50</y>
+      <x>460</x>
+      <y>90</y>
       <width>121</width>
       <height>41</height>
      </rect>
@@ -36,8 +36,8 @@
    <widget class="QTextEdit" name="testForReceive">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>230</y>
+      <x>90</x>
+      <y>220</y>
       <width>104</width>
       <height>70</height>
      </rect>
@@ -46,8 +46,8 @@
    <widget class="QTextEdit" name="testForSend">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>120</y>
+      <x>90</x>
+      <y>90</y>
       <width>104</width>
       <height>70</height>
      </rect>
@@ -56,14 +56,33 @@
    <widget class="QPushButton" name="sendButton">
     <property name="geometry">
      <rect>
-      <x>450</x>
-      <y>140</y>
-      <width>111</width>
-      <height>51</height>
+      <x>460</x>
+      <y>170</y>
+      <width>121</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
      <string>PushButton</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>20</y>
+      <width>451</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>楷体</family>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>基于HLA的分布式仿真架构演示系统</string>
     </property>
    </widget>
   </widget>
@@ -72,7 +91,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>636</width>
+     <width>657</width>
      <height>22</height>
     </rect>
    </property>

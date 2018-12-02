@@ -7,6 +7,7 @@
 #include <string>
 
 #include "socketConfig.h"
+#include "simType.h"
 
 
 using namespace std;
@@ -117,7 +118,7 @@ void ExampleCPPFederate::runFederate( char* federateName )
 	// update the attribute values of the object we registered, and will
 	// send an interaction.
 	int i;
-	for( i = 0; i < 20; i++ )
+	for( i = 0; i < 10; i++ )
 	{
 		// 9.1 update the attribute values of the instance //
 		updateAttributeValues( objectHandle );
@@ -129,12 +130,23 @@ void ExampleCPPFederate::runFederate( char* federateName )
 		advanceTime( 10.0 );
 		cout << "Time Advanced to " << fedamb->federateTime << endl;
         
+		RTI::AttributeHandleValuePairSet *attributes = RTI::AttributeSetFactory::create( 3 );
 
-		char sendData[1024];
+		char aaValue[16], abValue[16], acValue[16];
+		sprintf( aaValue, "aa:%f", getLbts() );
+		sprintf( abValue, "ab:%f", getLbts() );
+		sprintf( acValue, "ac:%f", getLbts() );
+		attributes->add( aaHandle, aaValue, (RTI::ULong)strlen(aaValue)+1 );
+		attributes->add( abHandle, abValue, (RTI::ULong)strlen(abValue)+1 );
+		attributes->add( acHandle, acValue, (RTI::ULong)strlen(acValue)+1 );
 
-		sprintf(sendData,  "Time Advanced to %f", fedamb->federateTime);
 
-		send(socketSclient, sendData, strlen(sendData), 0);
+		fedamb->reflectAttributeValues(objectHandle, *attributes, "hi");
+		//char sendData[1024];
+
+		//sprintf(sendData,  ":Time Advanced to %f;", getLbts());
+
+		//send(socketSclient, sendData, strlen(sendData), 0);
 	} 
 
 	//////////////////////////////////////
@@ -197,9 +209,15 @@ void ExampleCPPFederate::initializeHandles()
  */
 void ExampleCPPFederate::waitForUser()
 {
-	cout << " >>>>>>>>>> Press Enter to Continue <<<<<<<<<<" << endl;
-	string line;
-	getline( cin, line );
+	cout << " >>>>>>>>>> wait for start instruction <<<<<<<<<<" << endl;
+
+	while(!globleSimData.simStartFlag);
+
+	//cout << " >>>>>>>>>> Press Enter to Continue <<<<<<<<<<" << endl;
+	//string line;
+	
+
+	//getline( cin, line );
 }
 
 /*
