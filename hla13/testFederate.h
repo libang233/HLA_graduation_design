@@ -1,17 +1,17 @@
-#ifndef EXAMPLECPPFEDERATE_H_
-#define EXAMPLECPPFEDERATE_H_
+#ifndef TESTFEDERATE_H_
+#define TESTFEDERATE_H_
 
-#include "ExampleFedAmb.h"
 #include "RTI.hh"
+#include "testFedAmb.h"
 
 
 
 
-class ExampleCPPFederate
+class TestFederate
 {
 	public:
 		RTI::RTIambassador *rtiamb;
-		ExampleFedAmb      *fedamb;
+		testFedAmb      *fedamb;
 
 		// fom handles //
 		RTI::ObjectClassHandle      aHandle;
@@ -23,13 +23,13 @@ class ExampleCPPFederate
 		RTI::ParameterHandle        xbHandle;
 
 		// public methods //
-		ExampleCPPFederate();
-		virtual ~ExampleCPPFederate();
+		TestFederate();
+		virtual ~TestFederate();
 		void runFederate( char* federateName );
 		void overFederate();
 
 
-	
+	//private:
 		void initializeHandles();
 		void waitForUser();
 		void enableTimePolicy();
@@ -42,4 +42,5 @@ class ExampleCPPFederate
 		double getLbts();
 };
 
-#endif /*EXAMPLECPPFEDERATE_H_*/
+
+#endif /*TESTFEDERATE_H_*/

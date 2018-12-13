@@ -1,10 +1,10 @@
 #include <iostream>
-#include "ExampleFedAmb.h"
+#include "testFedAmb.h"
 #include "fedtime.hh"
 
 using namespace std;
 
-ExampleFedAmb::ExampleFedAmb()
+testFedAmb::testFedAmb()
 {
 	// initialize all the variable values
 	this->federateTime      = 0.0;
@@ -18,12 +18,12 @@ ExampleFedAmb::ExampleFedAmb()
 
 }
 
-ExampleFedAmb::~ExampleFedAmb()
+testFedAmb::~testFedAmb()
 	throw( RTI::FederateInternalError )
 {
 }
 
-double ExampleFedAmb::convertTime( const RTI::FedTime& theTime )
+double testFedAmb::convertTime( const RTI::FedTime& theTime )
 {
 	RTIfedTime castedTime = (RTIfedTime)theTime;
 	return castedTime.getTime();
@@ -32,38 +32,38 @@ double ExampleFedAmb::convertTime( const RTI::FedTime& theTime )
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////// Synchronization Point Callbacks ///////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-void ExampleFedAmb::synchronizationPointRegistrationSucceeded( const char* label )
+void testFedAmb::synchronizationPointRegistrationSucceeded( const char* label )
 	throw(RTI::FederateInternalError)
 {
 	cout << "Successfully registered sync point: " << label << endl;
 }
 
-void ExampleFedAmb::synchronizationPointRegistrationFailed( const char *label )
+void testFedAmb::synchronizationPointRegistrationFailed( const char *label )
 	throw(RTI::FederateInternalError)
 {
 	cout << "Failed to register sync point: " << label << endl;
 }
 
-void ExampleFedAmb::announceSynchronizationPoint( const char *label, const char *tag )
+void testFedAmb::announceSynchronizationPoint( const char *label, const char *tag )
 	throw(RTI::FederateInternalError)
 {
 	cout << "Synchronization point announced: " << label << endl;
-	if( strcmp(label, READY_TO_RUN) == 0 )
+	if( strcmp(label,TEST_READY_TO_RUN) == 0 )
 		this->isAnnounced = true;
 }
 
-void ExampleFedAmb::federationSynchronized( const char *label )
+void testFedAmb::federationSynchronized( const char *label )
 	throw(RTI::FederateInternalError)
 {
 	cout << "Federation Synchronized: " << label << endl;
-	if( strcmp(label, READY_TO_RUN) == 0 )
+	if( strcmp(label,TEST_READY_TO_RUN) == 0 )
 		this->isReadyToRun = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// Time Callbacks ///////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-void ExampleFedAmb::timeRegulationEnabled( const RTI::FedTime& theFederateTime )
+void testFedAmb::timeRegulationEnabled( const RTI::FedTime& theFederateTime )
 	throw( RTI::InvalidFederationTime,
 	       RTI::EnableTimeRegulationWasNotPending,
 	       RTI::FederateInternalError )
@@ -72,7 +72,7 @@ void ExampleFedAmb::timeRegulationEnabled( const RTI::FedTime& theFederateTime )
 	this->federateTime = convertTime( theFederateTime );
 }
 
-void ExampleFedAmb::timeConstrainedEnabled( const RTI::FedTime& theFederateTime )
+void testFedAmb::timeConstrainedEnabled( const RTI::FedTime& theFederateTime )
 	throw( RTI::InvalidFederationTime,
 	       RTI::EnableTimeConstrainedWasNotPending,
 	       RTI::FederateInternalError)
@@ -81,7 +81,7 @@ void ExampleFedAmb::timeConstrainedEnabled( const RTI::FedTime& theFederateTime 
 	this->federateTime = convertTime( theFederateTime );
 }
 
-void ExampleFedAmb::timeAdvanceGrant( const RTI::FedTime& theTime )
+void testFedAmb::timeAdvanceGrant( const RTI::FedTime& theTime )
 	throw( RTI::InvalidFederationTime,
 	       RTI::TimeAdvanceWasNotInProgress,
 	       RTI::FederateInternalError)
@@ -97,7 +97,7 @@ void ExampleFedAmb::timeAdvanceGrant( const RTI::FedTime& theTime )
 //                         //
 // Discover Object Methods //
 //                         //
-void ExampleFedAmb::discoverObjectInstance( RTI::ObjectHandle theObject,
+void testFedAmb::discoverObjectInstance( RTI::ObjectHandle theObject,
                                             RTI::ObjectClassHandle theObjectClass,
                                             const char* theObjectName )  
 	throw( RTI::CouldNotDiscover,
@@ -112,7 +112,7 @@ void ExampleFedAmb::discoverObjectInstance( RTI::ObjectHandle theObject,
 //                                 // 
 // Reflect Attribute Value Methods //
 //                                 // 
-void ExampleFedAmb::reflectAttributeValues( RTI::ObjectHandle theObject,
+void testFedAmb::reflectAttributeValues( RTI::ObjectHandle theObject,
                                             const RTI::AttributeHandleValuePairSet& theAttributes,
                                             const char *theTag )
 	throw( RTI::ObjectNotKnown,
@@ -141,7 +141,7 @@ void ExampleFedAmb::reflectAttributeValues( RTI::ObjectHandle theObject,
 	}
 }
 
-void ExampleFedAmb::reflectAttributeValues( RTI::ObjectHandle theObject,
+void testFedAmb::reflectAttributeValues( RTI::ObjectHandle theObject,
                                             const RTI::AttributeHandleValuePairSet& theAttributes,
                                             const RTI::FedTime& theTime,
                                             const char *theTag,
@@ -178,7 +178,7 @@ void ExampleFedAmb::reflectAttributeValues( RTI::ObjectHandle theObject,
 //                             //
 // Receive Interaction Methods //
 //                             //
-void ExampleFedAmb::receiveInteraction( RTI::InteractionClassHandle theInteraction,
+void testFedAmb::receiveInteraction( RTI::InteractionClassHandle theInteraction,
                                         const RTI::ParameterHandleValuePairSet& theParameters,
                                         const char *theTag )
 	throw( RTI::InteractionClassNotKnown,
@@ -191,7 +191,7 @@ void ExampleFedAmb::receiveInteraction( RTI::InteractionClassHandle theInteracti
 	cout << " handle=" << theInteraction;
 	// print the tag
 	cout << ", tag=" << theTag;
-	 
+	
 	// print the attribute information
 	cout << ", parameterCount=" << theParameters.size() << endl;
 	for( RTI::ULong i = 0; i < theParameters.size(); i++ )
@@ -206,7 +206,7 @@ void ExampleFedAmb::receiveInteraction( RTI::InteractionClassHandle theInteracti
 	}
 }
 
-void ExampleFedAmb::receiveInteraction( RTI::InteractionClassHandle theInteraction,
+void testFedAmb::receiveInteraction( RTI::InteractionClassHandle theInteraction,
                                         const RTI::ParameterHandleValuePairSet& theParameters,
                                         const RTI::FedTime& theTime,
                                         const char *theTag,
@@ -242,13 +242,13 @@ void ExampleFedAmb::receiveInteraction( RTI::InteractionClassHandle theInteracti
 //                       //
 // Remove Object Methods //
 //                       //
-void ExampleFedAmb::removeObjectInstance( RTI::ObjectHandle theObject, const char *theTag )
+void testFedAmb::removeObjectInstance( RTI::ObjectHandle theObject, const char *theTag )
 	throw( RTI::ObjectNotKnown, RTI::FederateInternalError )
 {
 	cout << "Object Removed: handle=" << theObject << endl;
 }
 
-void ExampleFedAmb::removeObjectInstance( RTI::ObjectHandle theObject,
+void testFedAmb::removeObjectInstance( RTI::ObjectHandle theObject,
                                           const RTI::FedTime& theTime,
                                           const char *theTag,
                                           RTI::EventRetractionHandle theHandle)

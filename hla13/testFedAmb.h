@@ -1,12 +1,12 @@
-#ifndef EXAMPLEFEDAMB_H_
-#define EXAMPLEFEDAMB_H_
+#ifndef TESTFEDAMB_H_
+#define TESTFEDAMB_H_
 
 #include <RTI.hh>
 #include <NullFederateAmbassador.hh>
 
-#define READY_TO_RUN "ReadyToRun"
+#define TEST_READY_TO_RUN "ReadyToRun"
 
-class ExampleFedAmb : public NullFederateAmbassador
+class testFedAmb : public NullFederateAmbassador
 {
 	public:
 		// variables //
@@ -20,8 +20,8 @@ class ExampleFedAmb : public NullFederateAmbassador
 		bool isReadyToRun;
 
 		// methods //
-		ExampleFedAmb();
-		virtual ~ExampleFedAmb() throw( RTI::FederateInternalError );
+		testFedAmb();
+		virtual ~testFedAmb() throw( RTI::FederateInternalError );
 		
 		///////////////////////////////////
 		// synchronization point methods //
@@ -122,4 +122,4 @@ class ExampleFedAmb : public NullFederateAmbassador
 
 };
 
-#endif /*EXAMPLEFEDAMB_H_*/
+#endif /*TESTFEDAMB_H_*/

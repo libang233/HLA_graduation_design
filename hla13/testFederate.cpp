@@ -2,8 +2,8 @@
 #include "RTI.hh"
 #include "fedtime.hh"
 
-#include "ExampleFedAmb.h"
-#include "ExampleCPPFederate.h"
+#include "testFedAmb.h"
+#include "testFederate.h"
 #include <string>
 
 #include "socketConfig.h"
@@ -12,11 +12,11 @@
 
 using namespace std;
 
-ExampleCPPFederate::ExampleCPPFederate()
+TestFederate::TestFederate()
 {
 }
 
-ExampleCPPFederate::~ExampleCPPFederate()
+TestFederate::~TestFederate()
 {
 	if( this->fedamb )
 		delete this->fedamb;
@@ -25,7 +25,7 @@ ExampleCPPFederate::~ExampleCPPFederate()
 ///////////////////////////////////////////////////////////////////////////
 ////////////////////////// Main Simulation Method /////////////////////////
 ///////////////////////////////////////////////////////////////////////////
-void ExampleCPPFederate::runFederate( char* federateName )
+void TestFederate::runFederate( char* federateName )
 {
 	/////////////////////////////////
 	// 1. create the RTIambassador //
@@ -48,11 +48,12 @@ void ExampleCPPFederate::runFederate( char* federateName )
 		cout << "Didn't create federation, it already existed" << endl;
 	}
 
+
 	////////////////////////////
 	// 3. join the federation //
 	////////////////////////////
 	// create the federate ambassador and join the federation
-	this->fedamb = new ExampleFedAmb();
+	this->fedamb = new testFedAmb();
 	rtiamb->joinFederationExecution( federateName, "ExampleFederation", fedamb );
 	cout << "Joined Federation as " << federateName << endl;
 
@@ -65,7 +66,7 @@ void ExampleCPPFederate::runFederate( char* federateName )
 	// announce a sync point to get everyone on the same page. if the point
 	// has already been registered, we'll get a callback saying it failed,
 	// but we don't care about that, as long as someone registered it
-	rtiamb->registerFederationSynchronizationPoint( READY_TO_RUN, "" );
+	rtiamb->registerFederationSynchronizationPoint( TEST_READY_TO_RUN, "" );
 	while( fedamb->isAnnounced == false )
 	{
 		rtiamb->tick();
@@ -82,8 +83,8 @@ void ExampleCPPFederate::runFederate( char* federateName )
 	///////////////////////////////////////////////////////
 	// tell the RTI we are ready to move past the sync point and then wait
 	// until the federation has synchronized on
-	rtiamb->synchronizationPointAchieved( READY_TO_RUN );
-	cout << "Achieved sync point: " << READY_TO_RUN << ", waiting for federation..." << endl;
+	rtiamb->synchronizationPointAchieved( TEST_READY_TO_RUN );
+	cout << "Achieved sync point: " << TEST_READY_TO_RUN << ", waiting for federation..." << endl;
 	while( fedamb->isReadyToRun == false )
 	{
 		rtiamb->tick();
@@ -149,7 +150,7 @@ void ExampleCPPFederate::runFederate( char* federateName )
 /*
  * 结束联邦成员仿真
  */
-void ExampleCPPFederate::overFederate()
+void TestFederate::overFederate()
 {
 
 
@@ -164,19 +165,6 @@ void ExampleCPPFederate::overFederate()
 	////////////////////////////////////////
 	// NOTE: we won't die if we can't do this because other federates
 	//       remain. in that case we'll leave it for them to clean up
-	try
-	{
-		rtiamb->destroyFederationExecution( "ExampleFederation" );
-		cout << "Destroyed Federation" << endl;
-	}
-	catch( RTI::FederationExecutionDoesNotExist dne )
-	{
-		cout << "No need to destroy federation, it doesn't exist" << endl;
-	}
-	catch( RTI::FederatesCurrentlyJoined fcj )
-	{
-		cout << "Didn't destroy federation, federates still joined" << endl;
-	}
 
 	//////////////////
 	// 13. clean up //
@@ -190,22 +178,22 @@ void ExampleCPPFederate::overFederate()
 /*
  * This method will get all the relevant handle information from the RTIambassador
  */
-void ExampleCPPFederate::initializeHandles()
+void TestFederate::initializeHandles()
 {
-	this->aHandle  = rtiamb->getObjectClassHandle( "ObjectRoot.A" );
-	this->aaHandle = rtiamb->getAttributeHandle( "aa", aHandle );
-	this->abHandle = rtiamb->getAttributeHandle( "ab", aHandle );
-	this->acHandle = rtiamb->getAttributeHandle( "ac", aHandle );
+	this->aHandle  = rtiamb->getObjectClassHandle( "ObjectRoot.B" );
+	this->aaHandle = rtiamb->getAttributeHandle( "ba", aHandle );
+	this->abHandle = rtiamb->getAttributeHandle( "bb", aHandle );
+	this->acHandle = rtiamb->getAttributeHandle( "bc", aHandle );
 
-	this->xHandle  = rtiamb->getInteractionClassHandle( "InteractionRoot.X" );
-	this->xaHandle = rtiamb->getParameterHandle( "xa", xHandle );
-	this->xbHandle = rtiamb->getParameterHandle( "xb", xHandle );
+	this->xHandle  = rtiamb->getInteractionClassHandle( "InteractionRoot.Y" );
+	this->xaHandle = rtiamb->getParameterHandle( "ya", xHandle );
+	this->xbHandle = rtiamb->getParameterHandle( "yb", xHandle );
 }
 
 /*
  * Blocks until the user hits enter
  */
-void ExampleCPPFederate::waitForUser()
+void TestFederate::waitForUser()
 {
 	cout << " >>>>>>>>>> wait for start instruction <<<<<<<<<<" << endl;
 
@@ -222,7 +210,7 @@ void ExampleCPPFederate::waitForUser()
  * This method will attempt to enable the various time related properties for
  * the federate
  */
-void ExampleCPPFederate::enableTimePolicy()
+void TestFederate::enableTimePolicy()
 {
 	////////////////////////////
 	// enable time regulation //
@@ -254,7 +242,7 @@ void ExampleCPPFederate::enableTimePolicy()
  * be creating, and the types of data we are interested in hearing about as other
  * federates produce it.
  */
-void ExampleCPPFederate::publishAndSubscribe()
+void TestFederate::publishAndSubscribe()
 {
 	////////////////////////////////////////////
 	// publish all attributes of ObjectRoot.A //
@@ -305,9 +293,9 @@ void ExampleCPPFederate::publishAndSubscribe()
  * return the federation-wide unique handle for that instance. Later in the
  * simulation, we will update the attribute values for this instance
  */
-RTI::ObjectHandle ExampleCPPFederate::registerObject()
+RTI::ObjectHandle TestFederate::registerObject()
 {
-	return rtiamb->registerObjectInstance( rtiamb->getObjectClassHandle("ObjectRoot.A") );
+	return rtiamb->registerObjectInstance( rtiamb->getObjectClassHandle("ObjectRoot.B") );
 }
 
 /*
@@ -318,7 +306,7 @@ RTI::ObjectHandle ExampleCPPFederate::registerObject()
  * Note that we don't actually have to update all the attributes at once, we
  * could update them individually, in groups or not at all!
  */
-void ExampleCPPFederate::updateAttributeValues( RTI::ObjectHandle objectHandle )
+void TestFederate::updateAttributeValues( RTI::ObjectHandle objectHandle )
 {
 	///////////////////////////////////////////////
 	// create the necessary container and values //
@@ -336,20 +324,18 @@ void ExampleCPPFederate::updateAttributeValues( RTI::ObjectHandle objectHandle )
 	attributes->add( aaHandle, aaValue, (RTI::ULong)strlen(aaValue)+1 );
 	attributes->add( abHandle, abValue, (RTI::ULong)strlen(abValue)+1 );
 	attributes->add( acHandle, acValue, (RTI::ULong)strlen(acValue)+1 );
-	
+	//cout << aaValue << endl;
+
 	//////////////////////////
 	// do the actual update //
 	//////////////////////////
 	rtiamb->updateAttributeValues( objectHandle, *attributes, "hi!" );
 
-	//cout << aaValue << endl;
-
-
 	// note that if you want to associate a particular timestamp with the
 	// update. here we send another update, this time with a timestamp:
-	//RTIfedTime time = fedamb->federateTime + fedamb->federateLookahead;
-	//rtiamb->updateAttributeValues( objectHandle, *attributes, time, "hi!" );
-
+	RTIfedTime time = fedamb->federateTime + fedamb->federateLookahead;
+	rtiamb->updateAttributeValues( objectHandle, *attributes, time, "hi!" );
+ 
 	// clean up
 	delete attributes;
 }
@@ -360,7 +346,7 @@ void ExampleCPPFederate::updateAttributeValues( RTI::ObjectHandle objectHandle )
  * they tick(). Here we are passing only two of the three parameters we could be
  * passing, but we don't actually have to pass any at all!
  */
-void ExampleCPPFederate::sendInteraction()
+void TestFederate::sendInteraction()
 {
 	///////////////////////////////////////////////
 	// create the necessary container and values //
@@ -395,7 +381,7 @@ void ExampleCPPFederate::sendInteraction()
  * timestep. It will then wait until a notification of the time advance grant
  * has been received.
  */
-void ExampleCPPFederate::advanceTime( double timestep )
+void TestFederate::advanceTime( double timestep )
 {
 	// request the advance
 	fedamb->isAdvancing = true;
@@ -407,6 +393,7 @@ void ExampleCPPFederate::advanceTime( double timestep )
 	while( fedamb->isAdvancing )
 	{
 		rtiamb->tick();
+		
 	}
 }
 
@@ -415,12 +402,12 @@ void ExampleCPPFederate::advanceTime( double timestep )
  * handle. We can only delete objects we created, or for which we own the
  * privilegeToDelete attribute.
  */
-void ExampleCPPFederate::deleteObject( RTI::ObjectHandle objectHandle )
+void TestFederate::deleteObject( RTI::ObjectHandle objectHandle )
 {
 	rtiamb->deleteObjectInstance( objectHandle, NULL );
 }
 
-double ExampleCPPFederate::getLbts()
+double TestFederate::getLbts()
 {
 	return (fedamb->federateTime + fedamb->federateLookahead);
 }
